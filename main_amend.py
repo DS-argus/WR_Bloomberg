@@ -140,7 +140,7 @@ class MonthlyReportData:
                     schema='dbo',
                     database='WSOL',
                     col_=['DATE', 'NAME', 'TICKER', 'TYPE', 'VALUE'],
-                    rows_=insert_
+                    rows_=[line]
                 )
 
             except pymssql._pymssql.IntegrityError as e:
