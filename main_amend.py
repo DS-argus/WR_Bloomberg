@@ -8,11 +8,10 @@ from xbbg import blp
 import pandas as pd
 import numpy as np
 import pymssql
+import json
 
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-import json
-import time
 
 
 def get_token(target:str) -> str:
@@ -30,7 +29,7 @@ def get_token(target:str) -> str:
     return dat['sql'][target]
 
 
-class MonthlyReportData:
+class InsertData:
     def __init__(self, work:str='initial'):
         """
         :param work:
@@ -89,9 +88,25 @@ class MonthlyReportData:
         print("Get Stock Indices")
         r0 = self.__get_stockind()
 
-        return r0
+        print("Get Individual Stocks")
+        r1 = self.__get_idvstock()
+
+        return r0, r1
 
     def __get_stockind(self):
+        tkrs = cfg.TICKER_IDXS
+        flds = ['PX_Last']
+
+        res = blp.bdh(
+            tkrs,
+            flds,
+            start_date=self.ds,
+            end_date=self.de,
+        )
+
+        return res
+
+    def __get_idvstock(self):
         tkrs = cfg.TICKER_STOCKS
         flds = ['PX_Last']
 
@@ -100,7 +115,6 @@ class MonthlyReportData:
             flds,
             start_date=self.ds,
             end_date=self.de,
-            #Fill='P'
         )
 
         return res
@@ -130,26 +144,27 @@ class MonthlyReportData:
         print("Inserting Data from Bloomberg")
         dats = self.get_bdh_data()
 
-        insert_ = self.create_insertible(dats)
+        for dfs in dats:
+            insert_ = self.create_insertible(dfs)
 
-        duples = 0
-        for line in insert_:
-            try:
-                self.server.insert_row(
-                    table_name='drvprc',
-                    schema='dbo',
-                    database='WSOL',
-                    col_=['DATE', 'NAME', 'TICKER', 'TYPE', 'VALUE'],
-                    rows_=[line]
-                )
+            duples = 0
+            for line in insert_:
+                try:
+                    self.server.insert_row(
+                        table_name='drvprc',
+                        schema='dbo',
+                        database='WSOL',
+                        col_=['DATE', 'NAME', 'TICKER', 'TYPE', 'VALUE'],
+                        rows_=[line]
+                    )
 
-            except pymssql._pymssql.IntegrityError as e:
-                print(f"{duples + 1}. {line[0]} & {line[1]} 은 이미 있는 정보입니다")
-                duples += 1
-                continue
+                except pymssql._pymssql.IntegrityError as e:
+                    print(f"{duples + 1}. {line[0]} & {line[1]} 은 이미 있는 정보입니다")
+                    duples += 1
+                    continue
 
 
 
 if __name__ == '__main__':
-    mrd = MonthlyReportData(work='amend')
+    mrd = InsertData(work='amend')
     mrd.run()
