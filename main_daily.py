@@ -216,8 +216,8 @@ class InsertData:
         for line in insert_:
             try:
                 self.server.insert_row(
-                    table_name='drvprc',
-                    schema='dbo',
+                    table_name='price',
+                    schema='drv',
                     database='WSOL',
                     col_=['DATE', 'NAME', 'TICKER', 'TYPE', 'VALUE'],
                     rows_=[line]
