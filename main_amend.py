@@ -7,6 +7,7 @@ import config as cfg
 from xbbg import blp
 import pandas as pd
 import numpy as np
+import xlwings as xw
 import pymssql
 import json
 
@@ -83,15 +84,23 @@ class InsertData:
         else:
             return date_start, date_end
 
-    def get_bdh_data(self) -> pd.DataFrame:
+    def get_bdh_data(self):
 
+        # daily로 업데이트 되고 있음
         print("Get Stock Indices")
         r0 = self.__get_stockind()
 
         print("Get Individual Stocks")
         r1 = self.__get_idvstock()
 
-        return r0, r1
+        # daily로 업데이트 되고 있음
+        print("Get Implied Volatility")
+        r2 = self.__get_implied_vol()
+
+        print("Get Interest rates")
+        r3 = self.__get_interest_rates()
+
+        return r3
 
     def __get_stockind(self):
         tkrs = cfg.TICKER_IDXS
@@ -119,8 +128,34 @@ class InsertData:
 
         return res
 
+    def __get_implied_vol(self):
+        tkrs = 'SPX Index'
+        flds = ['30DAY_IMPVOL_100.0%MNY_DF']
+
+        res = blp.bdh(
+            tkrs,
+            flds,
+            start_date=self.ds,
+            end_date=self.de,
+        )
+
+        return res
+
+    def __get_interest_rates(self):
+        tkrs = cfg.TICKER_RATES
+        flds = ['PX_Last']
+
+        res = blp.bdh(
+            tkrs,
+            flds,
+            start_date=self.ds,
+            end_date=self.de,
+        )
+
+        return res
+
     @staticmethod
-    def create_insertible(dat:pd.DataFrame):
+    def create_insertible(dat:pd.DataFrame) -> list:
         yn = YourNameIs().TICKER_NAME
         result = list()
         for date in dat.index:
@@ -144,8 +179,8 @@ class InsertData:
         print("Inserting Data from Bloomberg")
         dats = self.get_bdh_data()
 
-        for dfs in dats:
-            insert_ = self.create_insertible(dfs)
+        if isinstance(dats, tuple) is False:  # dataframe 1개일 때
+            insert_ = self.create_insertible(dats)
 
             duples = 0
             for line in insert_:
@@ -163,8 +198,28 @@ class InsertData:
                     duples += 1
                     continue
 
+        else:   # dataframe 2개 이상일 때
+            for dfs in dats:
+                insert_ = self.create_insertible(dfs)
+
+                duples = 0
+                for line in insert_:
+                    try:
+                        self.server.insert_row(
+                            table_name='price',
+                            schema='drv',
+                            database='WSOL',
+                            col_=['DATE', 'NAME', 'TICKER', 'TYPE', 'VALUE'],
+                            rows_=[line]
+                        )
+
+                    except pymssql._pymssql.IntegrityError as e:
+                        print(f"{duples + 1}. {line[0]} & {line[1]} 은 이미 있는 정보입니다")
+                        duples += 1
+                        continue
+
 
 
 if __name__ == '__main__':
     mrd = InsertData(work='amend')
-    mrd.run()
+    xw.view(mrd.get_bdh_data())

@@ -19,7 +19,21 @@ class YourNameIs:
         "VIX Index": "VIX",
 
         "TSLA US Equity": "TESLA",
-        "AMD US Equity": "AMD"
+        "AMD US Equity": "AMD",
+
+        # 11개/ call과 cd91는 전일 데이터가 다음날 조회되는지 확인( 토요일날 금요일껀 안보임)
+        "KWCR1T BOKR Curncy": "KW CALL", # ALLQ에서 데이터소스 선택가능, 체크 2551과 일치하는 금리
+        "KWCDC BOKR Curncy": "KW CD91", # CMPN과 동일, 공백없이 산출되는 것으로 보임
+        "KWSWOF Curncy": "KW SWAP 6M",
+        "KWSWOI Curncy": "KW SWAP 9M",
+        "KWSWO1 Curncy": "KW SWAP 1Y",
+        "KWSWO2 Curncy": "KW SWAP 2Y",
+        "KWSWO3 Curncy": "KW SWAP 3Y",
+        "KWSWO4 Curncy": "KW SWAP 4Y",
+        "KWSWO5 Curncy": "KW SWAP 5Y",
+        "KWSWO7 Curncy": "KW SWAP 7Y",
+        "KWSWO10 Curncy": "KW SWAP 10Y"
+
     }
 
 
@@ -46,4 +60,18 @@ TICKER_IDXS = [
 TICKER_STOCKS = [
     "TSLA US Equity",
     "AMD US Equity"
+]
+
+TICKER_RATES = [
+    "KWCR1T BOKR Curncy",
+    "KWCDC BOKR Curncy",
+    "KWSWOF Curncy",
+    "KWSWOI Curncy",
+    "KWSWO1 Curncy",
+    "KWSWO2 Curncy",
+    "KWSWO3 Curncy",
+    "KWSWO4 Curncy",
+    "KWSWO5 Curncy",
+    "KWSWO7 Curncy",
+    "KWSWO10 Curncy"
 ]

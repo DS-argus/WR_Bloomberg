@@ -7,7 +7,6 @@ import config as cfg
 from xbbg import blp
 import pandas as pd
 import numpy as np
-import xlwings as xw
 import pymssql
 import json
 
@@ -84,15 +83,47 @@ class InsertData:
         else:
             return date_start, date_end
 
-    def get_bdh_data(self) -> pd.DataFrame:
+    def get_bdh_data(self):
 
         print("Get Stock Indices")
         r0 = self.__get_stockind()
 
-        return r0
+        print("Get Implied Volatility")
+        r1 = self.__get_implied_vol()
+
+        print("Get Interest rates")
+        r2 = self.__get_interest_rates()
+
+        return r0, r1, r2
 
     def __get_stockind(self):
         tkrs = cfg.TICKER_IDXS
+        flds = ['PX_Last']
+
+        res = blp.bdh(
+            tkrs,
+            flds,
+            start_date=self.ds,
+            end_date=self.de,
+        )
+
+        return res
+
+    def __get_implied_vol(self):
+        tkrs = 'SPX Index'
+        flds = ['30DAY_IMPVOL_100.0%MNY_DF']
+
+        res = blp.bdh(
+            tkrs,
+            flds,
+            start_date=self.ds,
+            end_date=self.de,
+        )
+
+        return res
+
+    def __get_interest_rates(self):
+        tkrs = cfg.TICKER_RATES
         flds = ['PX_Last']
 
         res = blp.bdh(
@@ -129,23 +160,25 @@ class InsertData:
         print("Inserting Data from Bloomberg")
         dats = self.get_bdh_data()
 
-        insert_ = self.create_insertible(dats)
+        for dfs in dats:
 
-        duples = 0
-        for line in insert_:
-            try:
-                self.server.insert_row(
-                    table_name='price',
-                    schema='drv',
-                    database='WSOL',
-                    col_=['DATE', 'NAME', 'TICKER', 'TYPE', 'VALUE'],
-                    rows_=[line]
-                )
+            insert_ = self.create_insertible(dfs)
 
-            except pymssql._pymssql.IntegrityError as e:
-                print(f"{duples + 1}. {line[0]} & {line[1]} 은 이미 있는 정보입니다")
-                duples += 1
-                continue
+            duples = 0
+            for line in insert_:
+                try:
+                    self.server.insert_row(
+                        table_name='price',
+                        schema='drv',
+                        database='WSOL',
+                        col_=['DATE', 'NAME', 'TICKER', 'TYPE', 'VALUE'],
+                        rows_=[line]
+                    )
+
+                except pymssql._pymssql.IntegrityError as e:
+                    print(f"{duples + 1}. {line[0]} & {line[1]} 은 이미 있는 정보입니다")
+                    duples += 1
+                    continue
 
 
 if __name__ == '__main__':
