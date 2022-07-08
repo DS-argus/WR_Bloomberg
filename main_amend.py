@@ -84,21 +84,25 @@ class InsertData:
         else:
             return date_start, date_end
 
+    # 삽입하고 싶은 데이터 종류에 해당하는 코드만 주석 해제하고 return 부분 변경한 뒤 run
+    # 1. Index, 2. Implied volatility, 3. Interest rates는 매일 DB에 업데이트 중
     def get_bdh_data(self):
 
-        # daily로 업데이트 되고 있음
-        print("Get Stock Indices")
-        r0 = self.__get_stockind()
+        ## 1. Index
+        # print("Get Stock Indices")
+        # r0 = self.__get_stockind()
 
+        ## 2. Implied volatility
+        # print("Get Implied Volatility")
+        # r1 = self.__get_implied_vol()
+
+        ## 3. Interest rates
+        # print("Get Interest rates")
+        # r2 = self.__get_interest_rates()
+
+        # 4. 개별 주식
         print("Get Individual Stocks")
-        r1 = self.__get_idvstock()
-
-        # daily로 업데이트 되고 있음
-        print("Get Implied Volatility")
-        r2 = self.__get_implied_vol()
-
-        print("Get Interest rates")
-        r3 = self.__get_interest_rates()
+        r3 = self.__get_idvstock()
 
         return r3
 
@@ -129,7 +133,7 @@ class InsertData:
         return res
 
     def __get_implied_vol(self):
-        tkrs = 'SPX Index'
+        tkrs = cfg.TICKER_IDXS
         flds = ['30DAY_IMPVOL_100.0%MNY_DF']
 
         res = blp.bdh(
@@ -222,4 +226,4 @@ class InsertData:
 
 if __name__ == '__main__':
     mrd = InsertData(work='amend')
-    xw.view(mrd.get_bdh_data())
+    mrd.run()

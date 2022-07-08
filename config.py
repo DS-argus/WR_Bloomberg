@@ -37,6 +37,7 @@ class YourNameIs:
     }
 
 
+# 종가와 30D implied volatility update에 사용됨 --> 다른 implied vol 필요하면 List 분리
 TICKER_IDXS = [
     "SPX Index",
     "DJI Index",

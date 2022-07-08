@@ -109,8 +109,9 @@ class InsertData:
 
         return res
 
+    # IndeX의 30D Implied vol 모두 저장
     def __get_implied_vol(self):
-        tkrs = 'SPX Index'
+        tkrs = cfg.TICKER_IDXS
         flds = ['30DAY_IMPVOL_100.0%MNY_DF']
 
         res = blp.bdh(
