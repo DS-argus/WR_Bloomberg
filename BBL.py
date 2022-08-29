@@ -22,9 +22,11 @@ def getbldata(tkrs, flds, start_date, end_date):
 
 
 if __name__ == "__main__":
-    start = date(2020, 1, 1)
-    to = date(2022, 6, 3)
-    tickers = ['005930 KS Equity']
+    start = date(2010, 1, 1)
+    to = date.today()
+    tickers = ['ECGQUS Q123 Index']
     fields = ['PX_Last']
     df = getbldata(tickers, fields, start, to)
+    xw.view(df)
+    print(df)
 
