@@ -81,13 +81,13 @@ TICKER_RATES = [
     "KWSWO4 Curncy",
     "KWSWO5 Curncy",
     "KWSWO7 Curncy",
-    "KWSWO10 Curncy"
+    "KWSWO10 Curncy",
+    "US0003M Curncy"
 
 ]
 
 TICKER_DLF = [
     "USSW2 CURNCY",
     "USSW10 CURNCY",
-    "USSW30 CURNCY",
-    "US0003M Curncy"
+    "USSW30 CURNCY"
 ]

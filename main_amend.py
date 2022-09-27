@@ -96,19 +96,19 @@ class InsertData:
         # print("Get Implied Volatility")
         # r1 = self.__get_implied_vol()
 
-        ## 3. Interest rates
-        # print("Get Interest rates")
-        # r2 = self.__get_interest_rates()
+        # 3. Interest rates
+        print("Get Interest rates")
+        r2 = self.__get_interest_rates()
 
         # # 4. 개별 주식
         # print("Get Individual Stocks")
         # r3 = self.__get_idvstock()
 
-        # 5. 개별 주식
-        print("Get DLF data")
-        r4 = self.__get_DLF_rates()
+        # # 5. DLF 보고서용
+        # print("Get DLF data")
+        # r4 = self.__get_DLF_rates()
 
-        return r4
+        return r2
 
     def __get_stockind(self):
         tkrs = cfg.TICKER_IDXS
