@@ -94,7 +94,10 @@ class InsertData:
         print("Get Interest rates")
         r2 = self.__get_interest_rates()
 
-        return r0, r1, r2
+        print("Get DLF data")
+        r3 = self.__get_DLF_rates()
+
+        return r0, r1, r2, r3
 
     def __get_stockind(self):
         tkrs = cfg.TICKER_IDXS
@@ -132,6 +135,21 @@ class InsertData:
             flds,
             start_date=self.ds,
             end_date=self.de,
+        )
+
+        return res
+
+    # Monthly data
+    def __get_DLF_rates(self):
+        tkrs = cfg.TICKER_DLF
+        flds = ['PX_Last']
+
+        res = blp.bdh(
+            tkrs,
+            flds,
+            start_date=self.ds,
+            end_date=self.de,
+            Per = "M"
         )
 
         return res

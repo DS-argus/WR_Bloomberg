@@ -8,13 +8,14 @@ import numpy as np
 from datetime import date
 
 
-def getbldata(tkrs, flds, start_date, end_date):
+def getbldata(tkrs, flds, start_date, end_date, per='D'):
 
     res = blp.bdh(
         tkrs,
         flds,
         start_date=start_date,
         end_date=end_date,
+        Per=per
     )
 
     return res
@@ -22,11 +23,10 @@ def getbldata(tkrs, flds, start_date, end_date):
 
 
 if __name__ == "__main__":
-    start = date(2010, 1, 1)
+    start = date(2022, 9, 5)
     to = date.today()
-    tickers = ['ECGQUS Q123 Index']
+    tickers = ['US0003M Curncy']
     fields = ['PX_Last']
-    df = getbldata(tickers, fields, start, to)
-    xw.view(df)
+    df = getbldata(tickers, fields, start, to, 'M')
     print(df)
 

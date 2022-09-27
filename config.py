@@ -32,7 +32,14 @@ class YourNameIs:
         "KWSWO4 Curncy": "KW SWAP 4Y",
         "KWSWO5 Curncy": "KW SWAP 5Y",
         "KWSWO7 Curncy": "KW SWAP 7Y",
-        "KWSWO10 Curncy": "KW SWAP 10Y"
+        "KWSWO10 Curncy": "KW SWAP 10Y",
+
+
+        # for DLF report
+        "USSW2 CURNCY": "US CMS 2Y",
+        "USSW10 CURNCY": "US CMS 10Y",
+        "USSW30 CURNCY": "US CMS 30Y",
+        "US0003M Curncy": "LIBOR 3M"
 
     }
 
@@ -75,4 +82,12 @@ TICKER_RATES = [
     "KWSWO5 Curncy",
     "KWSWO7 Curncy",
     "KWSWO10 Curncy"
+
+]
+
+TICKER_DLF = [
+    "USSW2 CURNCY",
+    "USSW10 CURNCY",
+    "USSW30 CURNCY",
+    "US0003M Curncy"
 ]
