@@ -25,8 +25,16 @@ def getbldata(tkrs, flds, start_date, end_date, per='D'):
 if __name__ == "__main__":
     start = date(2022, 9, 5)
     to = date.today()
-    tickers = ['US0003M Curncy']
-    fields = ['PX_Last']
-    df = getbldata(tickers, fields, start, to, 'M')
+    tickers = [
+                "SPX Index",
+                # "SX5E Index",
+                # "KOSPI2 Index",
+                # "SHSZ300 Index",
+                # "NKY Index",
+                # "HSCEI Index"
+            ]
+
+    fields = ['30DAY_IMPVOL_100.0%MNY_DF', '60DAY_IMPVOL_100.0%MNY_DF']
+    df = getbldata(tickers, fields, start, to)
     print(df)
 

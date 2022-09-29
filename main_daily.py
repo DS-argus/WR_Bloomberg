@@ -112,10 +112,13 @@ class InsertData:
 
         return res
 
-    # IndeX의 30D Implied vol 모두 저장
+    # TICKER_IVOL의 30D, 60D, 3m, 6m Implied vol 모두 저장
     def __get_implied_vol(self):
-        tkrs = cfg.TICKER_IDXS
-        flds = ['30DAY_IMPVOL_100.0%MNY_DF']
+        tkrs = cfg.TICKER_IVOL
+        flds = ['30DAY_IMPVOL_100.0%MNY_DF',
+                '60DAY_IMPVOL_100.0%MNY_DF',
+                '3MTH_IMPVOL_100.0%MNY_DF',
+                '6MTH_IMPVOL_100.0%MNY_DF']
 
         res = blp.bdh(
             tkrs,

@@ -44,7 +44,7 @@ class YourNameIs:
     }
 
 
-# 종가와 30D implied volatility update에 사용됨 --> 다른 implied vol 필요하면 List 분리
+# 종가 update에 사용됨 --> 다른 implied vol 필요하면 List 분리
 TICKER_IDXS = [
     "SPX Index",
     "DJI Index",
@@ -63,6 +63,15 @@ TICKER_IDXS = [
     "IX5MKHKP Index",
     "HSCEKRWH Index",
     "VIX Index"
+]
+
+TICKER_IVOL = [
+    "SPX Index",
+    "SX5E Index",
+    "KOSPI2 Index",
+    "SHSZ300 Index",
+    "NKY Index",
+    "HSCEI Index"
 ]
 
 TICKER_STOCKS = [

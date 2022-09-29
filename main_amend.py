@@ -92,13 +92,13 @@ class InsertData:
         # print("Get Stock Indices")
         # r0 = self.__get_stockind()
 
-        ## 2. Implied volatility
-        # print("Get Implied Volatility")
-        # r1 = self.__get_implied_vol()
+        # 2. Implied volatility
+        print("Get Implied Volatility")
+        r1 = self.__get_implied_vol()
 
-        # 3. Interest rates
-        print("Get Interest rates")
-        r2 = self.__get_interest_rates()
+        # # 3. Interest rates
+        # print("Get Interest rates")
+        # r2 = self.__get_interest_rates()
 
         # # 4. 개별 주식
         # print("Get Individual Stocks")
@@ -108,7 +108,7 @@ class InsertData:
         # print("Get DLF data")
         # r4 = self.__get_DLF_rates()
 
-        return r2
+        return r1
 
     def __get_stockind(self):
         tkrs = cfg.TICKER_IDXS
@@ -137,8 +137,11 @@ class InsertData:
         return res
 
     def __get_implied_vol(self):
-        tkrs = cfg.TICKER_IDXS
-        flds = ['30DAY_IMPVOL_100.0%MNY_DF']
+        tkrs = cfg.TICKER_IVOL
+        flds = ['30DAY_IMPVOL_100.0%MNY_DF',
+                '60DAY_IMPVOL_100.0%MNY_DF',
+                '3MTH_IMPVOL_100.0%MNY_DF',
+                '6MTH_IMPVOL_100.0%MNY_DF']
 
         res = blp.bdh(
             tkrs,
